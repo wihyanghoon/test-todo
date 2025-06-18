@@ -1,6 +1,5 @@
-import '../index.css';
+import './css/index.css';
 
-import './index.css';
 import {
   addItem,
   deleteItem,
