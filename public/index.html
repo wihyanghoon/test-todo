@@ -1,10 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main_container">
+        <label for="search_input"
+          >오늘의 할일 추가
+          <input
+            type="text"
+            placeholder="What needs to be done?"
+            name="add"
+            id="search_input"
+            class="search_input"
+          />
+        </label>
+        <div class="todo_list_wrap">
+          <ul class="todo_list"></ul>
+        </div>
+        <div class="status_wrap" data-mode="all">
+          <div><span>0</span> items left</div>
+          <div>
+            <button class="show_all_btn">All</button>
+            <button class="show_active_btn">Active</button>
+            <button class="show_completed_btn">Completed</button>
+          </div>
+          <div>
+            <button>Clear Completed</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

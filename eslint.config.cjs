@@ -1,7 +1,8 @@
-import eslintPluginTs from '@typescript-eslint/eslint-plugin';
-import parserTs from '@typescript-eslint/parser';
+const eslintPluginTs = require('@typescript-eslint/eslint-plugin');
+const parserTs = require('@typescript-eslint/parser');
 
-export default [
+/** @type {import("eslint").Linter.FlatConfig[]} */
+module.exports = [
     {
         files: ['**/*.ts'],
         languageOptions: {
@@ -15,7 +16,6 @@ export default [
             '@typescript-eslint': eslintPluginTs,
         },
         rules: {
-            // 원하는 규칙 설정
             '@typescript-eslint/no-unused-vars': 'warn',
         },
     },

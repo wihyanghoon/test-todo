@@ -1,0 +1,62 @@
+.main {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main_container {
+    width: 500px;
+    padding: 50px;
+    border: 1px solid black;
+}
+
+.main_container input {
+    display: block;
+    width: 100%;
+    height: 30px;
+    border: 1px dotted red;
+    margin-top: 10px;
+}
+
+/* todo 리스트 아이템 */
+.todo_list_wrap {
+    margin-top: 20px;
+}
+
+.todo_item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px dotted black;
+}
+
+.todo_item.completed span {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.todo_item_wrap {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* 하단 버튼 영역 */
+.status_wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.status_wrap[data-mode="all"] .show_all_btn{
+    color: red;
+}
+
+.status_wrap[data-mode="active"] .show_active_btn{
+    color: red;
+}
+
+.status_wrap[data-mode="completed"] .show_completed_btn{
+    color: red;
+}
