@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Title</title>
-  <script defer src="bundle.js"></script></head>
+  </head>
   <body>
     <div class="main">
       <div class="main_container">
@@ -18,21 +18,14 @@
           />
         </label>
         <div class="todo_list_wrap">
-          <ul class="todo_list">
-            <li class="todo_item">
-              <div class="todo_item_wrapper">
-                <span>1</span>
-                <button>삭제</button>
-              </div>
-            </li>
-          </ul>
+          <ul class="todo_list"></ul>
         </div>
-        <div class="status_wrap">
+        <div class="status_wrap" data-mode="all">
           <div><span>0</span> items left</div>
           <div>
-            <button>All</button>
-            <button>Active</button>
-            <button>Completed</button>
+            <button class="show_all_btn">All</button>
+            <button class="show_active_btn">Active</button>
+            <button class="show_completed_btn">Completed</button>
           </div>
           <div>
             <button>Clear Completed</button>
@@ -40,5 +33,5 @@
         </div>
       </div>
     </div>
-  </body>
+  <script defer src="bundle.js"></script></body>
 </html>
