@@ -1,9 +1,13 @@
-import './index.css';
+import '../index.css';
 
-interface TodoItem {
-  text: string;
-  completed: boolean;
-}
+import './index.css';
+import {
+  addItem,
+  deleteItem,
+  clearCompletedItems,
+  reorderItems,
+  TodoItem,
+} from './ts/main';
 
 (() => {
   const containerEl = document.querySelector(
@@ -20,31 +24,29 @@ interface TodoItem {
   ) as HTMLDivElement | null;
 
   let dragStartIndex: number | null = null;
-
-  const itemList: TodoItem[] = [];
+  let itemList: TodoItem[] = [];
   let filterMode: 'all' | 'active' | 'completed' = 'all';
 
   const setEvent = () => {
     containerEl?.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
 
-      // 삭제
       if (target.classList.contains('delete_btn')) {
         const itemEl = target.closest('.todo_item') as HTMLElement | null;
         const index = itemEl?.dataset.itemIndex;
         if (index) {
-          onDeleteItem(Number(index));
+          itemList = deleteItem(itemList, Number(index));
+          renderItem();
         }
         return;
       }
 
-      // 완료 처리
       const itemEl = target.closest('.todo_item') as HTMLElement | null;
       if (itemEl && target.tagName !== 'BUTTON') {
         const index = itemEl.dataset.itemIndex;
         if (index !== undefined) {
-          itemList[Number(index)].completed =
-            !itemList[Number(index)].completed;
+          const idx = Number(index);
+          itemList[idx].completed = !itemList[idx].completed;
           renderItem();
         }
       }
@@ -53,8 +55,9 @@ interface TodoItem {
     inputEl?.addEventListener('keydown', (e) => {
       const target = e.target as HTMLInputElement;
       if (e.key === 'Enter' && target.value.trim()) {
-        onAddItem(target.value.trim());
+        itemList = addItem(itemList, target.value.trim());
         target.value = '';
+        renderItem();
       }
     });
 
@@ -63,30 +66,24 @@ interface TodoItem {
       if (target.classList.contains('show_all_btn')) {
         filterMode = 'all';
         statusEl.dataset.mode = 'all';
-        renderItem();
       } else if (target.classList.contains('show_active_btn')) {
         filterMode = 'active';
         statusEl.dataset.mode = 'active';
-        renderItem();
       } else if (target.classList.contains('show_completed_btn')) {
         filterMode = 'completed';
         statusEl.dataset.mode = 'completed';
-        renderItem();
       } else if (target.textContent === 'Clear Completed') {
-        clearCompleted();
+        itemList = clearCompletedItems(itemList);
       }
+      renderItem();
     });
 
     todoListEl?.addEventListener('dragstart', (e) => {
       const li = (e.target as HTMLElement).closest('.todo_item') as HTMLElement;
-      if (li) {
-        dragStartIndex = Number(li.dataset.itemIndex);
-      }
+      if (li) dragStartIndex = Number(li.dataset.itemIndex);
     });
 
-    todoListEl?.addEventListener('dragover', (e) => {
-      e.preventDefault(); // drop 허용
-    });
+    todoListEl?.addEventListener('dragover', (e) => e.preventDefault());
 
     todoListEl?.addEventListener('drop', (e) => {
       e.preventDefault();
@@ -95,29 +92,11 @@ interface TodoItem {
       ) as HTMLElement;
       if (dropLi && dragStartIndex !== null) {
         const dropIndex = Number(dropLi.dataset.itemIndex);
-        reorderItems(dragStartIndex, dropIndex);
+        itemList = reorderItems(itemList, dragStartIndex, dropIndex);
         dragStartIndex = null;
+        renderItem();
       }
     });
-  };
-
-  const onAddItem = (text: string) => {
-    itemList.push({ text, completed: false });
-    renderItem();
-  };
-
-  const onDeleteItem = (index: number) => {
-    itemList.splice(index, 1);
-    renderItem();
-  };
-
-  const clearCompleted = () => {
-    for (let i = itemList.length - 1; i >= 0; i--) {
-      if (itemList[i].completed) {
-        itemList.splice(i, 1);
-      }
-    }
-    renderItem();
   };
 
   const renderItem = () => {
@@ -132,7 +111,7 @@ interface TodoItem {
     });
 
     filtered.forEach((item) => {
-      const realIndex = itemList.indexOf(item); // 원본 index
+      const realIndex = itemList.indexOf(item);
       todoListEl.insertAdjacentHTML(
         'beforeend',
         `<li class="todo_item ${item.completed ? 'completed' : ''}" data-item-index="${realIndex}" draggable="true">
@@ -144,19 +123,9 @@ interface TodoItem {
       );
     });
 
-    updateStatus();
-  };
-
-  const updateStatus = () => {
     const leftCount = itemList.filter((item) => !item.completed).length;
     const span = statusEl?.querySelector('span');
     if (span) span.textContent = `${leftCount}`;
-  };
-
-  const reorderItems = (from: number, to: number) => {
-    const [moved] = itemList.splice(from, 1);
-    itemList.splice(to, 0, moved);
-    renderItem();
   };
 
   const init = () => {
